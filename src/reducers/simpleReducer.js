@@ -18,10 +18,10 @@ export default function (state = initialState, action) {
   console.log(action.value,"action.value")
   switch (action.type) {
   
-    case 'SIMPLE_ACTION':
+    case 'FETCH_DATA':
       return {
         ...state,
-        FirstData: action.value,
+        FirstData: [...state.FirstData,action.value],
         isLoading: false
       }
 

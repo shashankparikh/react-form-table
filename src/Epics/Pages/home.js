@@ -1,58 +1,78 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Table from '../Pages/Components/Tables/table'
 import { simpleAction } from '../../actions/simpleAction'
-import Cards from '../Pages/Components/Cards/cards'
 import { HomeConetent, BodyContent } from './style'
+
 
 class Home extends Component {
   state = {
-    page: 1,
-    limit: 3,
-    cardsArray: []
+    empId: '',
+    empName: '',
+    foodPref: '',
+    transport: ''
   }
 
   simpleAction = () => {
     const data = {
-      page: this.state.page + 1,
-      limit: this.state.limit
+      empId: this.state.empId,
+      empName: this.state.empName,
+      foodPref: this.state.foodPref,
+      transport: this.state.transport
     }
-    this.setState({ limit: this.state.limit, page: this.state.page + 1 }, () =>
-      this.props.simpleAction(data)
-    )
+    this.props.simpleAction(data)
   }
-
-  componentDidMount () {
-    const data = {
-      page: this.state.page,
-      limit: this.state.limit
-    }
-    this.setState({ limit: this.state.limit, page: this.state.page }, () =>
-      this.props.simpleAction(data)
-    )
+  changeEmpId = e => {
+    let value = e.target.value
+    this.setState({ empId: value })
   }
-
-  componentWillReceiveProps (nextProps) {
-    this.addingCardData(nextProps)
+  changeEmpName = e => {
+    let value = e.target.value
+    this.setState({ empName: value })
   }
-
-  addingCardData = data => {
-    data.getData.map(item => {
-      this.state.cardsArray.push(item)
-    }, console.log(this.state.cardsArray, 'this.state.cardsArray'))
+  changeEmpFood = e => {
+    let value = e.target.value
+    this.setState({ foodPref: value })
+  }
+  changeTransport = e => {
+    let value = e.target.value
+    this.setState({ transport: value })
   }
 
   render () {
-    const { getData, isLoading } = this.props
-    const { cardsArray } = this.state
-    console.log(getData)
+     console.log(this.props.getData,"from reducer")
+     
     return (
       <div>
         <HomeConetent>Home Page</HomeConetent>
         <BodyContent>
-          {!isLoading ? <Cards cars={cardsArray} /> : null}
+          {/* {!isLoading ? <Cards cars={cardsArray} /> : null} */}
+
+          <form>
+            <label>
+              Employee Id:
+              <input type='text' name='name' onChange={this.changeEmpId} />
+            </label>
+            <label>
+              Employee Name:
+              <input type='text' name='name' onChange={this.changeEmpName} />
+            </label>
+            <label>
+              Food Preference:
+              <input type='text' name='name' onChange={this.changeEmpFood} />
+            </label>
+            <label>
+              Mode of Transport
+              <input type='text' name='name' onChange={this.changeTransport} />
+            </label>
+            {/* <input type='submit' value='Submit' /> */}
+          </form>
+          <button onClick={this.simpleAction}>Submit</button>
         </BodyContent>
-        <button onClick={this.simpleAction}>Test redux action</button>
+
         {/* <pre>{JSON.stringify(this.props)}</pre> */}
+        {this.props.getData? <Table getTableData = {this.props.getData}/>:''}
+       
       </div>
     )
   }
